@@ -1,5 +1,6 @@
-Ôªøusing System;
+using System;
 using System.Net.Http;
+
 
 namespace wpfapp
 {
@@ -10,14 +11,14 @@ namespace wpfapp
 
         public ExchangeRates(HttpClient client)
         {
-            ApiName = "Komerƒçn√≠ banka";
+            ApiName = "»eskoslovensk· obchodnÌ banka";
             _client = client;
         }
 
         public void Get()
         {
             // ziskame json data
-            var response = _client.GetAsync($"http://api.kb.cz/openapi/v1/exchange-rates");
+            var response = _client.GetAsync($"https://www.csob.cz/portal/lide/kurzovni-listek/-/date/kurzy.txt");
             var respJson = response.Result.Content.ReadAsStringAsync().Result;
 
             //var a = JObject.Parse(respJson);

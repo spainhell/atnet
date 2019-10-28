@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <RootNamespace>cnb_api</RootNamespace>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy .\bin\Debug\netcoreapp3.0\cnb-api.dll ..\wpfapp\bin\Debug\netcoreapp3.0\plugins /y" />
+  </Target>
+
+  <ItemGroup>
+    <ProjectReference Include="..\shared\shared.csproj" />
+  </ItemGroup>
+
+</Project>

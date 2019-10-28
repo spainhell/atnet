@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -25,42 +26,42 @@ namespace wpfapp
     {
         //private static Logger logger;
         private Dictionary<string, IExchangeRates> _apiDictionary;
+        private ModulesControl modulesControl;
+        public int ModulesError { get; set; }
+        public int ModulesOk { get; set; }
 
-        private HttpClient _httpClient;
+
         public MainWindow()
         {
             InitializeComponent();
-            _apiDictionary = new Dictionary<string, IExchangeRates>();
-            _httpClient = new HttpClient();
-            LoadLibrary("kb-api.dll");
+            modulesControl = new ModulesControl();
+            modulesControl.Changed += ModuleLoadNotifyHandler;
+            LoadModulesInNewThread();
         }
 
-        public void LoadLibrary(string name)
+        public void LoadModulesInNewThread()
         {
-            try
+            Thread t1 = new Thread(modulesControl.LoadModules);
+            t1.Start();
+        }
+
+        // obsluha události
+        public void ModuleLoadNotifyHandler(object sender, ModuleLoadedEventArgs e)
+        {
+            if (e.Error) ModulesError++;
+            else ModulesOk++;
+
+            // přepis GUI z jiného vlákna
+            if (Application.Current.Dispatcher != null) Application.Current.Dispatcher.Invoke(() =>
             {
-                var asm = Assembly.LoadFrom(name);
+                tbOk.Text = ModulesOk.ToString();
+                tbError.Text = ModulesError.ToString();
+            });
+        }
 
-                var t = asm.GetTypes();
-
-                var typeExchangeRates = asm.GetType("wpfapp.ExchangeRates");
-                if (typeExchangeRates.GetInterface("IExchangeRates") == null)
-                {
-                    // vyvoláme výjimku
-                }
-
-                var propApiName = typeExchangeRates.GetProperty("ApiName");
-                
-                IExchangeRates exRates = (IExchangeRates) Activator.CreateInstance(typeExchangeRates, _httpClient);
-                string apiName = (string) propApiName.GetValue(exRates, null);
-
-                _apiDictionary.Add(apiName, exRates);
-
-            }
-            catch (Exception ex)
-            {
-                //logger.Error($"Knihovnu '{name}' nelze načíst.");
-            }
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var a = ModulesError + ModulesOk;
         }
     }
 }

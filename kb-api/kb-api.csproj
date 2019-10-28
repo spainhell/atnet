@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
@@ -12,5 +12,9 @@
   <ItemGroup>
     <ProjectReference Include="..\shared\shared.csproj" />
   </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy .\bin\Debug\netcoreapp3.0\kb-api.dll ..\wpfapp\bin\Debug\netcoreapp3.0\plugins /y" />
+  </Target>
 
 </Project>

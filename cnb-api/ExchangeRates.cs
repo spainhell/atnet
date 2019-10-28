@@ -1,23 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 
 namespace wpfapp
 {
-    public class ExchangeRates : IExchangeRates
+    class ExchangeRates : IExchangeRates
     {
         private readonly HttpClient _client;
         public string ApiName { get; private set; }
 
         public ExchangeRates(HttpClient client)
         {
-            ApiName = "Komerční banka";
+            ApiName = "Česká národní banka";
             _client = client;
         }
 
         public void Get()
         {
             // ziskame json data
-            var response = _client.GetAsync($"http://api.kb.cz/openapi/v1/exchange-rates");
+            var response = _client.GetAsync($"https://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt");
             var respJson = response.Result.Content.ReadAsStringAsync().Result;
 
             //var a = JObject.Parse(respJson);
