@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <RootNamespace>kb_api</RootNamespace>
+    <Authors>Jan Spanhel SPA0138</Authors>
+    <Company>VSB</Company>
+    <Product>API Komercni banka</Product>
+    <Description>Exchange rates Komercni banka</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\shared\shared.csproj" />
+  </ItemGroup>
+
+</Project>
