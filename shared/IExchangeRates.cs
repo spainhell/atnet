@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using shared;
 
 namespace wpfapp
 {
     public interface IExchangeRates
     {
-        void Get();
+        List<ForeignCurrency> Get();
     }
 }

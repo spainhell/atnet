@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
+using shared;
 
 namespace wpfapp
 {
@@ -10,11 +12,11 @@ namespace wpfapp
 
         public ExchangeRates(HttpClient client)
         {
-            ApiName = "Komerční banka";
+            ApiName = "KB";
             _client = client;
         }
 
-        public void Get()
+        public List<ForeignCurrency> Get()
         {
             // ziskame json data
             var response = _client.GetAsync($"http://api.kb.cz/openapi/v1/exchange-rates");
@@ -27,6 +29,7 @@ namespace wpfapp
             //var transactions = transactionList.SelectTokens("transaction");
 
             //dynamic b = JsonConvert.DeserializeObject<dynamic>(respJson);
+            return null;
         }
     }
 }

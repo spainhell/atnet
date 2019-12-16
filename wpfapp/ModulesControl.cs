@@ -23,6 +23,20 @@ namespace wpfapp
             _moduleFiles = GetPluginFolderModulesList();
         }
 
+        // Indexer -> vrací API podle jména ze slovníku
+        public IExchangeRates this[string sourceName] => _apiDictionary[sourceName];
+
+        public List<string> getModulesNames()
+        {
+            List<string> list = new List<string>(_apiDictionary.Count);
+            foreach (var api in _apiDictionary)
+            {
+                list.Add(api.Key);
+            }
+
+            return list;
+        }
+
         protected string[] GetPluginFolderModulesList()
         {
             var files = Directory.GetFiles(".\\plugins");
@@ -70,7 +84,7 @@ namespace wpfapp
                 }
 
                 // umělé čekání
-                Thread.Sleep(3000);
+                Thread.Sleep(1000);
             }
         }
 
@@ -82,5 +96,7 @@ namespace wpfapp
                 Changed(this, e);
             }
         }
+
+        
     }
 }
