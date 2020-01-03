@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading;
+using System.Windows.Navigation;
 
 namespace wpfapp
 {
@@ -16,6 +17,10 @@ namespace wpfapp
         private Dictionary<string, IExchangeRates> _apiDictionary;
         private string[] _moduleFiles;
 
+        public Dictionary<string, IExchangeRates> GetModules()
+        {
+            return _apiDictionary;
+        }
         public ModulesControl()
         {
             _apiDictionary = new System.Collections.Generic.Dictionary<string, IExchangeRates>();
@@ -70,7 +75,7 @@ namespace wpfapp
                 }
 
                 // umělé čekání
-                Thread.Sleep(3000);
+                Thread.Sleep(1500);
             }
         }
 

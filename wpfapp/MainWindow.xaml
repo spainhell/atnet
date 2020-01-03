@@ -5,11 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:wpfapp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="300" Width="800">
     <Grid>
-        <TextBox x:Name="tbOk" HorizontalAlignment="Left" Margin="109,81,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="tbError" HorizontalAlignment="Left" Margin="109,120,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="400,120,0,0" VerticalAlignment="Top" Click="Button_Click"/>
+        <Label Content="Úspěšně načtené moduly:" HorizontalAlignment="Left" Margin="40,27,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="tbOk" HorizontalAlignment="Left" Margin="40,53,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Neúspěšně načtené moduly:" HorizontalAlignment="Left" Margin="40,76,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="tbError" HorizontalAlignment="Left" Margin="40,102,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Výběr modulu:" HorizontalAlignment="Left" Margin="40,125,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="comboBox" SelectedValuePath="Value" DisplayMemberPath="Key" HorizontalAlignment="Left" Margin="40,151,0,0" VerticalAlignment="Top" Width="186"/>
+        <Button Content="Načti" HorizontalAlignment="Left" Margin="40,190,0,0" VerticalAlignment="Top" Click="Button_Click"/>
+        <DataGrid Margin="273,53,20,55"/>
+        <Label Content="Kurzovní lístek:" HorizontalAlignment="Left" Margin="273,27,0,0" VerticalAlignment="Top"/>
+        <Button Content="Načti z XML" HorizontalAlignment="Left" Margin="273,243,0,0" VerticalAlignment="Top" Click="Button_Click"/>
+        <Button Content="Ulož do XML" HorizontalAlignment="Center" Margin="0,243,0,0" VerticalAlignment="Top" Click="Button_Click"/>
+
 
     </Grid>
 </Window>

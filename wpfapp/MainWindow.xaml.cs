@@ -48,12 +48,16 @@ namespace wpfapp
         // obsluha události
         public void ModuleLoadNotifyHandler(object sender, ModuleLoadedEventArgs e)
         {
+            _apiDictionary = modulesControl.GetModules();
+
+
             if (e.Error) ModulesError++;
             else ModulesOk++;
 
             // přepis GUI z jiného vlákna
             if (Application.Current.Dispatcher != null) Application.Current.Dispatcher.Invoke(() =>
             {
+                comboBox.ItemsSource = _apiDictionary;
                 tbOk.Text = ModulesOk.ToString();
                 tbError.Text = ModulesError.ToString();
             });
@@ -61,7 +65,11 @@ namespace wpfapp
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            var a = ModulesError + ModulesOk;
+            var selectedPair = (KeyValuePair<string, IExchangeRates>) comboBox.SelectedItem;
+            var selectedValue = selectedPair.Value;
+            selectedValue.Get();
+
+
         }
     }
 }
