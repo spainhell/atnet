@@ -14,9 +14,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "kb-api", "kb-api\kb-api.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "shared", "shared\shared.csproj", "{24A52145-24B1-4480-994F-1F868D08ACE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cnb-api", "cnb-api\cnb-api.csproj", "{6E938679-EC9A-4040-B677-9E38DB4245CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cnb-api", "cnb-api\cnb-api.csproj", "{6E938679-EC9A-4040-B677-9E38DB4245CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csob-api", "csob-api\csob-api.csproj", "{D2809C32-60C3-48C2-9F24-1B38336D12B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "csob-api", "csob-api\csob-api.csproj", "{D2809C32-60C3-48C2-9F24-1B38336D12B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
