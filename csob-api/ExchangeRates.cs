@@ -1,5 +1,7 @@
-using System;
+ï»¿using System;
+using System.Collections.Generic;
 using System.Net.Http;
+using shared;
 
 
 namespace wpfapp
@@ -11,11 +13,11 @@ namespace wpfapp
 
         public ExchangeRates(HttpClient client)
         {
-            ApiName = "Èeskoslovenská obchodní banka";
+            ApiName = "ÃˆSOB";
             _client = client;
         }
 
-        public void Get()
+        public List<ForeignCurrency> Get()
         {
             // ziskame json data
             var response = _client.GetAsync($"https://www.csob.cz/portal/lide/kurzovni-listek/-/date/kurzy.txt");
@@ -28,6 +30,7 @@ namespace wpfapp
             //var transactions = transactionList.SelectTokens("transaction");
 
             //dynamic b = JsonConvert.DeserializeObject<dynamic>(respJson);
+            return null;
         }
     }
 }

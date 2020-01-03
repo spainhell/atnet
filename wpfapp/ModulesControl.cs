@@ -17,10 +17,25 @@ namespace wpfapp
         private Dictionary<string, IExchangeRates> _apiDictionary;
         private string[] _moduleFiles;
 
+        // Indexer -> vrací API podle jména ze slovníku
+        public IExchangeRates this[string sourceName] => _apiDictionary[sourceName];
+
+        public List<string> GetModulesNames()
+        {
+            List<string> list = new List<string>(_apiDictionary.Count);
+            foreach (var api in _apiDictionary)
+            {
+                list.Add(api.Key);
+            }
+
+            return list;
+        }
+
         public Dictionary<string, IExchangeRates> GetModules()
         {
             return _apiDictionary;
         }
+
         public ModulesControl()
         {
             _apiDictionary = new System.Collections.Generic.Dictionary<string, IExchangeRates>();

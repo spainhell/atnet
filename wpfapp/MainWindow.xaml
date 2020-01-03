@@ -14,10 +14,19 @@
         <Label Content="Výběr modulu:" HorizontalAlignment="Left" Margin="40,125,0,0" VerticalAlignment="Top"/>
         <ComboBox x:Name="comboBox" SelectedValuePath="Value" DisplayMemberPath="Key" HorizontalAlignment="Left" Margin="40,151,0,0" VerticalAlignment="Top" Width="186"/>
         <Button Content="Načti" HorizontalAlignment="Left" Margin="40,190,0,0" VerticalAlignment="Top" Click="Button_Click"/>
-        <DataGrid Margin="273,53,20,55"/>
+        <DataGrid x:Name="dgMoney" AutoGenerateColumns="False" Margin="273,53,30,74">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Datum" Binding="{Binding Datum}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Měna" Binding="{Binding Mena}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Země" Binding="{Binding Zeme}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Množství" Binding="{Binding Mnozstvi}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Daviza nákup" Binding="{Binding DevizaNakup}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Deviza prodej" Binding="{Binding DevizaProdej}"></DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
         <Label Content="Kurzovní lístek:" HorizontalAlignment="Left" Margin="273,27,0,0" VerticalAlignment="Top"/>
         <Button Content="Načti z XML" HorizontalAlignment="Left" Margin="273,243,0,0" VerticalAlignment="Top" Click="Button_Click"/>
-        <Button Content="Ulož do XML" HorizontalAlignment="Center" Margin="0,243,0,0" VerticalAlignment="Top" Click="Button_Click"/>
+        <Button Content="Ulož do XML" HorizontalAlignment="Center" Margin="0,243,0,0" VerticalAlignment="Top" Click="Button_SaveToXml_Click"/>
 
 
     </Grid>
