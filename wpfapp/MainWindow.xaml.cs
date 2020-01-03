@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
@@ -30,10 +31,12 @@ namespace wpfapp
         //private static Logger logger;
         private Dictionary<string, IExchangeRates> _apiDictionary;
         private ModulesControl modulesControl;
-
         private List<ForeignCurrency> actualCurrencies;
+        private CultureInfo ci;
+        
         public int ModulesError { get; set; }
         public int ModulesOk { get; set; }
+
 
 
         public MainWindow()
@@ -41,6 +44,7 @@ namespace wpfapp
             InitializeComponent();
             modulesControl = new ModulesControl();
             modulesControl.Changed += ModuleLoadNotifyHandler;
+            ci = new CultureInfo("en-US");
             LoadModulesInNewThread();
         }
 
@@ -84,6 +88,9 @@ namespace wpfapp
             doc.InsertBefore(xmlDeclaration, root);
 
             XmlElement elementCurrencies = doc.CreateElement(string.Empty, "currencies", string.Empty);
+            XmlAttribute attrDate = doc.CreateAttribute("date");
+            attrDate.Value = actualCurrencies[0].Datum.ToString(ci);
+            elementCurrencies.Attributes.Append(attrDate);
             doc.AppendChild(elementCurrencies);
 
             foreach (var currency in actualCurrencies)
@@ -99,15 +106,15 @@ namespace wpfapp
                 zeme.AppendChild(zemeText);
 
                 XmlElement mnozstvi = doc.CreateElement(string.Empty, "amount", string.Empty);
-                XmlText mnozstviText = doc.CreateTextNode(currency.Mnozstvi.ToString());
+                XmlText mnozstviText = doc.CreateTextNode(currency.Mnozstvi.ToString(ci));
                 mnozstvi.AppendChild(mnozstviText);
 
                 XmlElement devNakup = doc.CreateElement(string.Empty, "exBuy", string.Empty);
-                XmlText devNakupText = doc.CreateTextNode(currency.DevizaNakup.ToString());
+                XmlText devNakupText = doc.CreateTextNode(currency.DevizaNakup.ToString(ci));
                 devNakup.AppendChild(devNakupText);
 
                 XmlElement devProdej = doc.CreateElement(string.Empty, "exSell", string.Empty);
-                XmlText devProdejText = doc.CreateTextNode(currency.DevizaProdej.ToString());
+                XmlText devProdejText = doc.CreateTextNode(currency.DevizaProdej.ToString(ci));
                 devProdej.AppendChild(devProdejText);
 
                 elementCurr.AppendChild(mena);
@@ -120,7 +127,33 @@ namespace wpfapp
             }
 
             doc.Save("curr.xml");
-            
+        }
+
+        private void Button_LoadFromXml_Click(object sender, RoutedEventArgs e)
+        {
+            actualCurrencies = new List<ForeignCurrency>(50);
+
+            XmlDocument doc = new XmlDocument();
+            doc.Load("curr.xml");
+            XmlNode node = doc.SelectSingleNode("currencies");
+            DateTime date = Convert.ToDateTime(node.Attributes["date"].Value, ci);
+            XmlNodeList prop = node.SelectNodes("currency");
+
+            foreach (XmlNode n in prop)
+            {
+                string n_code = n.SelectSingleNode("code").InnerText;
+                string n_country = n.SelectSingleNode("country").InnerText;
+                decimal n_amount = Convert.ToDecimal(n.SelectSingleNode("amount").InnerText, ci);
+                decimal n_exBuy = Convert.ToDecimal(n.SelectSingleNode("exBuy").InnerText, ci);
+                decimal n_exSell = Convert.ToDecimal(n.SelectSingleNode("exSell").InnerText, ci);
+
+                var fc = new ForeignCurrency()
+                    { Datum = date, Zeme = n_country, Mena = n_code, 
+                        Mnozstvi = n_amount, DevizaNakup = n_exBuy, DevizaProdej = n_exSell };
+                actualCurrencies.Add(fc);
+            }
+
+            dgMoney.ItemsSource = actualCurrencies;
         }
     }
 }

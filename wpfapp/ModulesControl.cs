@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
@@ -31,6 +32,18 @@ namespace wpfapp
             return list;
         }
 
+        public List<string> GetSortedModulesNames()
+        {
+            List<string> list = new List<string>(_apiDictionary.Count);
+
+            foreach (var api in _apiDictionary)
+            {
+                list.Add(api.Key);
+            }
+
+            return list;
+        }
+
         public Dictionary<string, IExchangeRates> GetModules()
         {
             return _apiDictionary;
@@ -51,16 +64,20 @@ namespace wpfapp
 
         public void LoadModules()
         {
+            Debug.WriteLine($"ModulesControl.LoadModules()");
             foreach (var file in _moduleFiles)
             {
                 try
                 {
+                    Debug.WriteLine($"Nahravam modul {file}.");
                     var asm = Assembly.LoadFrom(file);
 
                     var typeExchangeRates = asm.GetType("wpfapp.ExchangeRates");
                     if (typeExchangeRates.GetInterface("IExchangeRates") == null)
                     {
-                        throw new Exception("Knihovna neimplementuje požadované rozhraní.");
+                        Trace.WriteLine($"Chyba v modulu {file}. Neni naimplementovano pozadovane rozhrani.");
+                        ModuleLoadedEventArgs argsE = new ModuleLoadedEventArgs() { Error = true };
+                        OnModuleLoaded(argsE);
                     }
 
                     var propApiName = typeExchangeRates.GetProperty("ApiName");
@@ -70,19 +87,22 @@ namespace wpfapp
 
                     if (apiName == null)
                     {
-                        throw new Exception("Knihovna nemá nastaven název.");
+                        Trace.WriteLine($"Chyba v modulu {file}. Knihovna nema nastavene jmeno.");
+                        ModuleLoadedEventArgs argsE = new ModuleLoadedEventArgs() { Error = true };
+                        OnModuleLoaded(argsE);
                     }
 
                     _apiDictionary.Add(apiName, exRates);
 
                     // vyvoláme událost OK
-                    ModuleLoadedEventArgs args = new ModuleLoadedEventArgs() { Error = false };
-                    OnModuleLoaded(args);
+                    Trace.WriteLine($"Modul {file} byl uspesne nacten.");
+                    ModuleLoadedEventArgs argsOK = new ModuleLoadedEventArgs() { Error = false };
+                    OnModuleLoaded(argsOK);
 
                 }
                 catch (Exception ex)
                 {
-                    //logger.Error($"Knihovnu '{name}' nelze načíst.");
+                    Trace.WriteLine($"Knihovnu '{file}' nelze načíst.");
 
                     // vyvoláme událost ERROR
                     ModuleLoadedEventArgs args = new ModuleLoadedEventArgs() { Error = true };
@@ -92,6 +112,7 @@ namespace wpfapp
                 // umělé čekání
                 Thread.Sleep(1500);
             }
+            Debug.WriteLine($"ModulesControl.LoadModules() - KONEC");
         }
 
         protected virtual void OnModuleLoaded(ModuleLoadedEventArgs e)

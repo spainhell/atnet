@@ -13,7 +13,7 @@ namespace wpfapp
 
         public ExchangeRates(HttpClient client)
         {
-            ApiName = "ÈSOB";
+            ApiName = "ČSOB";
             _client = client;
         }
 
