@@ -30,8 +30,8 @@ namespace wpfapp
     {
         //private static Logger logger;
         private Dictionary<string, IExchangeRates> _apiDictionary;
-        private ModulesControl modulesControl;
-        private List<ForeignCurrency> actualCurrencies;
+        private ModulesControl _modulesControl;
+        private List<ForeignCurrency> _actualCurrencies;
         private CultureInfo ci;
         
         public int ModulesError { get; set; }
@@ -42,22 +42,22 @@ namespace wpfapp
         public MainWindow()
         {
             InitializeComponent();
-            modulesControl = new ModulesControl();
-            modulesControl.Changed += ModuleLoadNotifyHandler;
+            _modulesControl = new ModulesControl();
+            _modulesControl.Changed += ModuleLoadNotifyHandler;
             ci = new CultureInfo("en-US");
             LoadModulesInNewThread();
         }
 
         public void LoadModulesInNewThread()
         {
-            Thread t1 = new Thread(modulesControl.LoadModules);
+            Thread t1 = new Thread(_modulesControl.LoadModules);
             t1.Start();
         }
 
         // obsluha události
         public void ModuleLoadNotifyHandler(object sender, ModuleLoadedEventArgs e)
         {
-            _apiDictionary = modulesControl.GetModules();
+            _apiDictionary = _modulesControl.GetModules();
 
 
             if (e.Error) ModulesError++;
@@ -76,8 +76,8 @@ namespace wpfapp
         {
             var selectedPair = (KeyValuePair<string, IExchangeRates>) comboBox.SelectedItem;
             IExchangeRates selectedValue = selectedPair.Value;
-            actualCurrencies = selectedValue.Get();
-            dgMoney.ItemsSource = actualCurrencies;
+            _actualCurrencies = selectedValue.Get();
+            dgMoney.ItemsSource = _actualCurrencies;
         }
 
         private void Button_SaveToXml_Click(object sender, RoutedEventArgs e)
@@ -89,11 +89,11 @@ namespace wpfapp
 
             XmlElement elementCurrencies = doc.CreateElement(string.Empty, "currencies", string.Empty);
             XmlAttribute attrDate = doc.CreateAttribute("date");
-            attrDate.Value = actualCurrencies[0].Datum.ToString(ci);
+            attrDate.Value = _actualCurrencies[0].Datum.ToString(ci);
             elementCurrencies.Attributes.Append(attrDate);
             doc.AppendChild(elementCurrencies);
 
-            foreach (var currency in actualCurrencies)
+            foreach (var currency in _actualCurrencies)
             {
                 XmlElement elementCurr = doc.CreateElement(string.Empty, "currency", string.Empty);
 
@@ -131,7 +131,7 @@ namespace wpfapp
 
         private void Button_LoadFromXml_Click(object sender, RoutedEventArgs e)
         {
-            actualCurrencies = new List<ForeignCurrency>(50);
+            _actualCurrencies = new List<ForeignCurrency>(50);
 
             XmlDocument doc = new XmlDocument();
             doc.Load("curr.xml");
@@ -150,10 +150,10 @@ namespace wpfapp
                 var fc = new ForeignCurrency()
                     { Datum = date, Zeme = n_country, Mena = n_code, 
                         Mnozstvi = n_amount, DevizaNakup = n_exBuy, DevizaProdej = n_exSell };
-                actualCurrencies.Add(fc);
+                _actualCurrencies.Add(fc);
             }
 
-            dgMoney.ItemsSource = actualCurrencies;
+            dgMoney.ItemsSource = _actualCurrencies;
         }
     }
 }

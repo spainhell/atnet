@@ -20,7 +20,7 @@ namespace wpfapp
         public List<ForeignCurrency> Get()
         {
             List<ForeignCurrency> list = new List<ForeignCurrency>();
-            // ziskame json data
+            
             var response = _client.GetAsync($"https://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt");
             var cnbTxt = response.Result.Content.ReadAsStringAsync().Result;
 
